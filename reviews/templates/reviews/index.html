@@ -1,0 +1,37 @@
+{% extends "reviews/base01.html" %}
+
+{% block title %}
+    <h2 class="text-center">Lista de Departamentos</h2>
+    <hr class="mt-0 mb-4">
+{% endblock %}
+
+
+{% block search %}
+    <div class="input-group mb-3">
+        <input id="user-input"type="text" class="form-control" placeholder="Busca por Curso!!">
+    </div>
+    <div id="replaceable-content">
+        {% include 'reviews/partial-res.html' %}
+    </div>
+{% endblock %}
+
+
+{% block content %}
+{% if v2.dept_list %}
+<div class="row">
+    {% for dept in v2.dept_list %}
+    <div class="col-sm-4">
+        <div class="card card-1 text-center text-white bg-dark mb-2">
+            <div class="card-body">
+                <h5 class="card-title">{{dept.name}}</h5>
+                <hr>
+                <a href="{% url 'reviews:mat_list' dept.id %}" class="btn btn-primary stretched-link">Ver Materias</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p>No Hay Departamentos</p>
+{% endif %}
+{% endblock %}

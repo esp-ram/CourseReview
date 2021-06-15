@@ -1,0 +1,22 @@
+{% extends 'reviews/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+<h2>Enviar Mensaje</h2>
+<hr class="mt-0 mb-4">
+{% endblock %}
+
+
+{% block content %}
+<div class="card3 text-center text-white bg-dark mb-2">
+    <div class="card-body">
+        <h3>Add your review</h3>
+        <form action="{% url 'reviews:sent'%}" method="post">
+        {% csrf_token %}
+            {{form.mensaje|as_crispy_field}}
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

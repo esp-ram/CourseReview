@@ -1,0 +1,8 @@
+{% if cate %}
+    <div class="list-group">
+        {% for cur in cate %}
+        <a href="{% url 'reviews:course_detail' cur.mat cur.id %}" class="list-group-item list-group-item-action list-group-item-info">{{cur.name}} - {{cur.mat}} - {{cur.mat.id}}</a>
+        {% endfor %}
+    </div>
+
+{% endif %}

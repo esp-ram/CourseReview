@@ -1,0 +1,38 @@
+{% extends 'reviews/base.html' %}
+
+
+{% block title %}
+<h2>Lista de Materias de {{depto}}</h2>
+<hr class="mt-0 mb-4">
+{% endblock %}
+
+
+{% block content %}
+{% if mat_list %}
+<div class="row">
+    {% for mater in mat_list %}
+    <div class="col-sm-4 columna">
+        <div class="card text-center text-white bg-dark mb-2">
+            <div class="card-body">
+                <h5 class="card-title">{{mater.id}}</h5>
+                <hr>
+                <p class="card-text">{{mater.name}}</p>
+                <a href="{% url 'reviews:course_list' mater.id %}" class="btn btn-primary stretched-link">Ver Cursos</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card text-center text-black bg-warning mb-2" style="width: 21 rem; height: 20 rem;">
+            <div class="card-body">
+                <h5 class="card-title">no hay materias para el Departamento elegido <br> <a href="{% url 'reviews:dept_list'%}"> VOLVER A DEPARTAMENTOS</a></h5>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- <p>No mater are available.</p> -->
+{% endif %}
+{% endblock %}

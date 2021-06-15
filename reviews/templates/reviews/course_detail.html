@@ -1,0 +1,136 @@
+{% extends 'reviews/base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+
+<div class="card9 text-center text-white bg-dark mb-2">
+
+    <h1 class="card-title">{{ course.name }}</h1>
+    <hr>
+    <div class="card-body">
+        <h3 class="card-text"> {{course.mat.id}} - {{course.mat}}</h3>
+    </div>
+    <hr>
+    {% if course.average_recs != -1%}
+        <div class="card-body">
+            <h5 class="card-text">{{ course.coursereview_set.count }} reviews (el {{ course.average_recs | floatformat }}% lo recomienda)</h5>
+        </div>
+        {% else %}
+        <div class="card-body">
+            <p class="card-text">No hay reviews</p>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+{% if course.coursereview_set.all %}
+    {% for review in listado %}
+    <div class="card2 text-center text-white bg-dark mb-2" style="width: 21 rem;">
+        <div class="card-body">
+
+        {% if review.recom == 1 %}
+                <h5 class="card-title"><strong>LO RECOMIENDO</strong></h5>
+        {% else %}
+                <h5 class="card-title"><strong>NO LO RECOMIENDO</strong></h5>
+        {% endif %}
+
+        <h6>cursada en el {{review.cuatr}} cuatrimestre de {{review.year}}</h6>
+        <hr>
+        <p class="card-text">{{ review.comment }}</p>
+        <hr>
+        <div class="text-right">
+
+        {% if review.flag == 1 %}
+            <a class="btn btn-dark btn-sm disabled" > Approved! </a>
+        {% elif review.flag == -1 %}
+            <a class="btn btn-dark btn-sm disabled"> Flagged! </a>
+        {% else %}
+            <a id="{{review.id}}" href="{% url 'reviews:flag_rev' review.id %}"  class="btn btn-dark btn-sm" onclick="flagButton(id)">Flag Review</a>
+        {% endif %}
+
+        {% if user.is_superuser %}
+            <a id="{{review.id}}del" href="{% url 'reviews:del_rev' review.id%}" class ="btn btn-danger btn-sm" onclick="deleteButton(id)">DELETE REVIEW</a>
+        {%endif%}
+        </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if listado.has_other_pages %}
+    <div class="card4 text-center text-white bg-dark mb-2">
+    <div class="card-body">
+    <div class="card-text">
+    <ul class="pagination">
+    {% if listado.has_previous %}
+      <li><a href="?page={{ listado.previous_page_number }}" class ="btn btn-primary stretched-link">&laquo;</a></li>
+    {% else %}
+      <li class="disabled btn btn-primary"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in listado.paginator.page_range %}
+      {% if listado.number == i %}
+        <li class="active btn btn-primary"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}" class ="btn btn-primary stretched-link">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if listado.has_next %}
+      <li><a href="?page={{ listado.next_page_number }}" class ="btn btn-primary stretched-link">&raquo;</a></li>
+    {% else %}
+      <li class="disabled btn btn-primary"><span>&raquo;</span></li>
+    {% endif %}
+    </ul>
+    </div>
+    </div>
+    </div>
+    {% endif %}
+{% else %}
+<div class="card3 text-center text-dark bg-warning mb-2">
+    <div class="card-body">
+        <p class="card-text">Be the first to write a review</p>
+    </div>
+</div>
+{% endif %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<div class="card3 text-center text-white bg-dark mb-2">
+    <div class="card-body">
+        <h3>Add your review</h3>
+        <form action="{% url 'reviews:add_recom' course.mat course.id %}" method="post">
+        {% csrf_token %}
+            <div class='row'>
+                <div class = 'col-4'>
+                    {{form.year|as_crispy_field}}
+                </div>
+                <div class="col-4">
+                    {{form.cuatr|as_crispy_field}}
+                </div>
+                <div class="col-4">
+                    {{form.recom|as_crispy_field}}
+                </div>
+            </div>
+            {{form.comment|as_crispy_field}}
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function flagButton(Id) {
+    document.getElementById(Id).classList = "btn btn-dark btn-sm";
+    document.getElementById(Id).classList.add('disabled');
+    document.getElementById(Id).innerHTML = "Flagged!";
+}
+function deleteButton(Id){
+    document.getElementById(Id).classList = "btn btn-danger btn-sm";
+    document.getElementById(Id).classList.add('disabled');
+    document.getElementById(Id).innerHTML = "Deleted!";
+}
+</script>
+{% endblock %}

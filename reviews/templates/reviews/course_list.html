@@ -1,0 +1,42 @@
+{% extends 'reviews/base.html' %}
+
+
+
+{% block title %}
+<h2>Lista de Cursos de {{materia}}</h2>
+<hr class="mt-0 mb-4">
+{% endblock %}
+
+
+{% block content %}
+{% if course_list %}
+<div class="row">
+    {% for course in course_list %}
+    <div class="col-sm-4">
+        <div class="card text-center text-white bg-dark mb-2" style="width: 21 rem; height: 20 rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{course.mat.id}}</h5>
+                <hr>
+                <p class="card-text">{{course.name}}</p>
+                <a href="{% url 'reviews:course_detail' course.mat course.id %}" class="btn btn-primary stretched-link">Ver Cursos</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="card card5 text-center text-dark bg-warning mb-2" style="width: 21 rem; height: 40 rem;">
+            <div class="card-body">
+                <h5 class="card-title">OPS..</h5>
+                <hr>
+                <p class="card-text">No hay cursos para el Departamento elegido</p>
+                <p class="card-text"><a href="{% url 'reviews:contacto' %}"> AGREGA UN CURSO</a> </p>
+                <p class="card-text"><a href="{% url 'reviews:dept_list'%}"> VOLVER A DEPARTAMENTOS</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
