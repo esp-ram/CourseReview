@@ -88,7 +88,7 @@ def add_recom(request, course_id, mat_id):
         CReview.recom = recom
         CReview.cuatr = cuatr
         CReview.year = year
-        CReview.comment = comment
+        CReview.comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         CReview.save()
         return HttpResponseRedirect(reverse('reviews:course_detail',args=(mat.id,course.id,)))
 
