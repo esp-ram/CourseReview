@@ -119,7 +119,6 @@ def contacto(request):
 
 def send_msg(request):
     form = MessageForm(request.POST)
-    print(request.POST)
     if form.is_valid():
         mensaje = form.cleaned_data['mensaje']
         sendM = AdminMessage()
